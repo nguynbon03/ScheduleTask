@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ViewMode } from "@/lib/types";
@@ -22,6 +23,7 @@ interface SidebarProps {
   isMobile: boolean;
   mobileOpen: boolean;
   onMobileClose: () => void;
+  onLogout?: () => void;
 }
 
 const navItems: { view: ViewMode; label: string; icon: React.ElementType }[] = [
@@ -39,6 +41,7 @@ export function Sidebar({
   isMobile,
   mobileOpen,
   onMobileClose,
+  onLogout,
 }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -119,6 +122,32 @@ export function Sidebar({
           );
         })}
       </nav>
+
+      {/* Logout */}
+      {onLogout && (
+        <div className="px-2 pb-4">
+          <button
+            onClick={onLogout}
+            className={cn(
+              "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 text-muted-foreground hover:bg-red-500/10 hover:text-red-500"
+            )}
+          >
+            <LogOut className="w-5 h-5 shrink-0" />
+            <AnimatePresence>
+              {!collapsed && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  className="whitespace-nowrap overflow-hidden"
+                >
+                  Đăng xuất
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+      )}
     </div>
   );
 
