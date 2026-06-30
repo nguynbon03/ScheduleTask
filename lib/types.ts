@@ -30,6 +30,7 @@ export interface Task {
   estimatedMinutes?: number;
   tags: string[];
   subtasks: Subtask[];
+  reminders: Reminder[];
   createdAt: string;
   updatedAt: string;
   completedAt?: string;
@@ -57,11 +58,29 @@ export interface Habit {
   createdAt: string;
 }
 
+export interface Reminder {
+  id: string;
+  minutesBefore: number; // e.g. 15, 30, 60
+  type: "browser" | "email";
+  sent: boolean;
+  sentAt?: string;
+}
+
 export interface UserSettings {
   accentColor: string;
   theme: "light" | "dark" | "system";
   timezone: string;
+  email?: string;
+  notificationsEnabled: boolean;
 }
+
+export const REMINDER_OPTIONS = [
+  { label: "15 phút", value: 15 },
+  { label: "30 phút", value: 30 },
+  { label: "1 giờ", value: 60 },
+  { label: "2 giờ", value: 120 },
+  { label: "1 ngày", value: 1440 },
+];
 
 export const PRIORITY_COLORS: Record<Priority, string> = {
   urgent: "#FF3B30",

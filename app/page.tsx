@@ -13,6 +13,7 @@ import { HabitsView } from "@/components/habits-view";
 import { ProjectsView } from "@/components/projects-view";
 import { SettingsView } from "@/components/settings-view";
 import { TaskModal } from "@/components/task-modal";
+import { useNotifications } from "@/components/notification-service";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -25,10 +26,18 @@ export default function Home() {
   const { theme, setTheme } = useTheme();
 
   const store = useAppStore();
+  const { requestPermission } = useNotifications(store.tasks);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Auto request notification permission when enabled
+  useEffect(() => {
+    if (store.settings.notificationsEnabled) {
+      requestPermission();
+    }
+  }, [store.settings.notificationsEnabled, requestPermission]);
 
   // Keyboard shortcuts
   useEffect(() => {

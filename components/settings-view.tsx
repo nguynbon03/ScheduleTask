@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Monitor, Trash2 } from "lucide-react";
+import { Moon, Sun, Monitor, Trash2, Bell, Mail, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserSettings } from "@/lib/types";
 
@@ -22,17 +23,89 @@ export function SettingsView({
   onClearData,
 }: SettingsViewProps) {
   const { theme, setTheme } = useTheme();
+  const [emailSaved, setEmailSaved] = useState(false);
+
+  const handleEmailSave = () => {
+    setEmailSaved(true);
+    setTimeout(() => setEmailSaved(false), 2000);
+  };
 
   return (
     <div className="flex flex-col h-full">
       <div className="px-6 py-4 border-b border-border">
         <h1 className="text-xl font-bold tracking-tight">Cài đặt</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          Tùy chỉnh giao diện và màu sắc
+          Tùy chỉnh giao diện, thông báo và màu sắc
         </p>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8 max-w-2xl">
+        {/* Notifications */}
+        <section>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+            Thông báo
+          </h2>
+          <div className="space-y-4">
+            {/* Browser notifications toggle */}
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-card border border-border/60">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Thông báo trình duyệt</p>
+                  <p className="text-xs text-muted-foreground">Nhắc nhở khi sắp đến giờ nhiệm vụ</p>
+                </div>
+              </div>
+              <button
+                onClick={() => onUpdateSettings({ notificationsEnabled: !settings.notificationsEnabled })}
+                className={cn(
+                  "w-12 h-7 rounded-full transition-all relative",
+                  settings.notificationsEnabled ? "bg-primary" : "bg-muted"
+                )}
+              >
+                <div className={cn(
+                  "w-5 h-5 rounded-full bg-white absolute top-1 transition-all shadow-sm",
+                  settings.notificationsEnabled ? "left-6" : "left-1"
+                )} />
+              </button>
+            </div>
+
+            {/* Email */}
+            <div className="p-4 rounded-2xl bg-card border border-border/60 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Email nhắc nhở</p>
+                  <p className="text-xs text-muted-foreground">Nhận thông báo qua email</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  value={settings.email || ""}
+                  onChange={(e) => onUpdateSettings({ email: e.target.value })}
+                  placeholder="email@example.com"
+                  className="flex-1 px-4 py-2 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+                <button
+                  onClick={handleEmailSave}
+                  className={cn(
+                    "px-4 py-2 rounded-xl text-sm font-medium transition-all",
+                    emailSaved
+                      ? "bg-green-500 text-white"
+                      : "bg-primary text-primary-foreground hover:opacity-90"
+                  )}
+                >
+                  {emailSaved ? <Check className="w-4 h-4" /> : "Lưu"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Theme */}
         <section>
           <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
@@ -118,9 +191,6 @@ export function SettingsView({
             </p>
             <p className="text-xs text-muted-foreground">
               Xây dựng với Next.js + Tailwind CSS + shadcn/ui
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Tham khảo: habit, will-be-done, DeyWeaver, DooTask
             </p>
           </div>
         </section>

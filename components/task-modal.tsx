@@ -85,6 +85,7 @@ export function TaskModal({
       estimatedMinutes: undefined as number | undefined,
       tags,
       subtasks,
+      reminders: [],
     };
     if (isEditing && task && onUpdate) {
       onUpdate(task.id, payload);

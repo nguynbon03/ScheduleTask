@@ -38,24 +38,21 @@ function saveData(data: AppData) {
 }
 
 function loadSettings(): UserSettings {
-  if (typeof window === "undefined") {
-    return {
-      accentColor: "#007AFF",
-      theme: "system",
-      timezone: "Asia/Ho_Chi_Minh",
-    };
-  }
-  try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    // ignore
-  }
-  return {
+  const defaults: UserSettings = {
     accentColor: "#007AFF",
     theme: "system",
     timezone: "Asia/Ho_Chi_Minh",
+    notificationsEnabled: false,
+    email: "",
   };
+  if (typeof window === "undefined") return defaults;
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (raw) return { ...defaults, ...JSON.parse(raw) };
+  } catch {
+    // ignore
+  }
+  return defaults;
 }
 
 function saveSettings(settings: UserSettings) {
@@ -84,6 +81,7 @@ export function useAppStore() {
     const now = new Date().toISOString();
     const newTask: Task = {
       ...task,
+      reminders: task.reminders || [],
       id: crypto.randomUUID(),
       createdAt: now,
       updatedAt: now,
