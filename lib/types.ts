@@ -36,11 +36,17 @@ export interface Task {
   completedAt?: string;
 }
 
+export interface DoseTime {
+  time: string; // HH:mm
+  label: string;
+}
+
 export interface HabitCompletion {
   date: string; // YYYY-MM-DD
   completed: boolean;
   count: number;
   note?: string;
+  doses?: { time: string; taken: boolean }[]; // track each dose time
 }
 
 export interface Habit {
@@ -49,8 +55,9 @@ export interface Habit {
   description?: string;
   color: string;
   icon: string;
-  frequency: "daily" | "weekly";
+  frequency: "daily" | "weekly" | "medicine";
   targetCount: number;
+  doseTimes?: DoseTime[]; // for medicine: e.g. [{ time: "08:00", label: "Sáng" }, ...]
   completions: HabitCompletion[];
   streak: number;
   bestStreak: number;
@@ -133,6 +140,26 @@ export const DEFAULT_HABITS: Habit[] = [
     streak: 0,
     bestStreak: 0,
     order: 2,
+    createdAt: new Date().toISOString(),
+  },
+  // Medicine tracking example
+  {
+    id: "h4",
+    name: "Uống thuốc huyết áp",
+    description: "Mỗi ngày sau ăn sáng",
+    color: "#FF3B30",
+    icon: "Pill",
+    frequency: "medicine",
+    targetCount: 3,
+    doseTimes: [
+      { time: "07:00", label: "Sáng sau ăn" },
+      { time: "12:00", label: "Trưa sau ăn" },
+      { time: "18:00", label: "Tối sau ăn" },
+    ],
+    completions: [],
+    streak: 0,
+    bestStreak: 0,
+    order: 3,
     createdAt: new Date().toISOString(),
   },
 ];
