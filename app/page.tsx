@@ -17,7 +17,7 @@ import { TaskModal } from "@/components/task-modal";
 import { useNotifications } from "@/components/notification-service";
 
 export default function Home() {
-  const { user } = useAuth(); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const { user, loading: authLoading } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [activeView, setActiveView] = useState<ViewMode>("day");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -33,6 +33,13 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user && mounted) {
+      window.location.href = '/login';
+    }
+  }, [authLoading, user, mounted]);
 
   // Auto request notification permission when enabled
   useEffect(() => {
@@ -93,6 +100,14 @@ export default function Home() {
       (t.dueDate === new Date().toISOString().split("T")[0] || !t.dueDate) &&
       t.status !== "done"
   );
+
+  if (authLoading || !mounted || !user) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   if (!mounted) {
     return (
