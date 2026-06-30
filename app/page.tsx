@@ -17,7 +17,7 @@ import { TaskModal } from "@/components/task-modal";
 import { useNotifications } from "@/components/notification-service";
 
 export default function Home() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [activeView, setActiveView] = useState<ViewMode>("day");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -127,6 +127,7 @@ export default function Home() {
         isMobile={false}
         mobileOpen={mobileSidebarOpen}
         onMobileClose={() => setMobileSidebarOpen(false)}
+        onLogout={logout}
       />
 
       {/* Mobile Sidebar Overlay */}
@@ -137,6 +138,7 @@ export default function Home() {
         isMobile={true}
         mobileOpen={mobileSidebarOpen}
         onMobileClose={() => setMobileSidebarOpen(false)}
+        onLogout={logout}
       />
 
       {/* Main Content */}
