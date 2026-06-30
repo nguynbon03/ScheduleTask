@@ -24,8 +24,8 @@ export default function LoginPage() {
       } else {
         await register(name, email, password);
       }
-    } catch (err: any) {
-      setError(err.message || "Có lỗi xảy ra");
+    } catch (err: unknown) {
+      setError((err as Error)?.message || "Có lỗi xảy ra");
     } finally {
       setLoading(false);
     }

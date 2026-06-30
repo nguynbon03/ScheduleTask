@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, Plus, Sun, Moon, Keyboard, LogOut, User } from "lucide-react";
+import { Menu, Plus, Sun, Moon, Keyboard } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ViewMode, Task } from "@/lib/types";
 import { useAppStore } from "@/lib/store";
@@ -17,7 +17,7 @@ import { TaskModal } from "@/components/task-modal";
 import { useNotifications } from "@/components/notification-service";
 
 export default function Home() {
-  const { user, logout, loading } = useAuth();
+  const { user } = useAuth(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [mounted, setMounted] = useState(false);
   const [activeView, setActiveView] = useState<ViewMode>("day");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
