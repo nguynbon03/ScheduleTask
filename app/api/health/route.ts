@@ -5,7 +5,7 @@ export async function GET() {
     const mongoose = await import("@/lib/db/mongoose");
     await mongoose.default();
     return NextResponse.json({ status: "ok", db: "connected" });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json(
       { status: "error", message: err.message || String(err) },
       { status: 500 }
