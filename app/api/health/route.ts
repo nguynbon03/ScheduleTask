@@ -6,8 +6,9 @@ export async function GET() {
     await mongoose.default();
     return NextResponse.json({ status: "ok", db: "connected" });
   } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      { status: "error", message: err.message || String(err) },
+      { status: "error", message },
       { status: 500 }
     );
   }
